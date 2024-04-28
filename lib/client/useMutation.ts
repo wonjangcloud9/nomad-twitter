@@ -21,6 +21,7 @@ export default function useMutation<T = any>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(data),
     })
