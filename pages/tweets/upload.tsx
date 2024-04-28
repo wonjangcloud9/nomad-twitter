@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import useMutation from "../../lib/client/useMutation";
 import { useRouter } from "next/router";
 import Header from "../_components/header";
+import HeaderSkeleton from "../_components/header-skeleton";
+import UploadSkeleton from "./_components/upload-skeleton";
 
 interface uploadForm {
   title: string;
@@ -13,7 +15,7 @@ interface uploadForm {
 
 export default () => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const { register, handleSubmit, formState } = useForm<uploadForm>();
 
   const [uploadTweet, { loading: tweetLoading, data }] =
@@ -37,10 +39,19 @@ export default () => {
     }
   }, [data, router]);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center min-h-screen ">
+        <HeaderSkeleton />
+        <UploadSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center min-h-screen">
       <Header />
-      <div className="pt-12  bg-white shadow-xl px-3 w-96 flex flex-col gap-12 justify-center">
+      <div className="pt-32  bg-white shadow-xl px-3 w-96 flex flex-col gap-12 justify-start">
         <div className="text-2xl font-bold text-center">Tweet 만들기</div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onValid)}>
           <Input
@@ -80,7 +91,7 @@ export default () => {
             error={formState.errors?.description?.message}
             multiLine
           />
-          <button className="bg-orange-500 text-white py-2 rounded-md">
+          <button className="bg-orange-500 text-white py-2 rounded-md mt-5">
             게시
           </button>
         </form>
