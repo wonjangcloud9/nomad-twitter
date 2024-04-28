@@ -96,7 +96,7 @@ export default () => {
                 message: "패스워드는 2자 이상이어야 합니다.",
               },
             })}
-            type="text"
+            type="password"
             required={true}
             placehodler="패스워드를 입력해주세요."
             error={formState.errors?.password?.message}
@@ -109,7 +109,7 @@ export default () => {
                 value === getValues("password") ||
                 "패스워드가 일치하지 않습니다.",
             })}
-            type="text"
+            type="password"
             required={true}
             placehodler="패스워드를 다시 입력해주세요."
             error={formState.errors?.passwordConfirm?.message}
