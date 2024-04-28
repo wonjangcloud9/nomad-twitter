@@ -24,17 +24,20 @@ export default () => {
   const { user } = useUser();
   const router = useRouter();
   const { data, mutate: boundMutate } = useSWR<TweetResponse>(
-    router.query.id ? `/api/tweets/${router.query.id}` : null
+    router.query.id ? `/api/tweets/${router.query.id}` : null,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
+    }
   );
   const [toggleFav] = useMutation(`/api/tweets/${router.query.id}/fav`);
 
   const onFavClick = async () => {
     if (!data) return;
-    await boundMutate({
+    boundMutate({
       ...data,
       favs: data.favs.filter((fav) => fav.userId !== user?.id),
-    }).then(() => {
-      boundMutate();
     });
     toggleFav({});
   };
@@ -74,21 +77,21 @@ export default () => {
               <button
                 className={cls(
                   "bg-orange-400 text-white p-2 rounded-lg hover:bg-orange-500 transition text-center w-14",
-                  data.favs.length !== 0 ? "text-white" : "text-orange-300"
+                  data.favs.find((fav) => fav.userId === user.id)
+                    ? "bg-orange-500"
+                    : ""
                 )}
                 onClick={onFavClick}
               >
-                {data.favs.length > 0 ? (
-                  <div className="flex items-center gap-2">
-                    <FaRegThumbsUp className="w-5 h-5 " />
-                    <span>{data.favs.length}</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <FaRegThumbsUp className="w-5 h-5 " />
-                    <span>{data.favs.length}</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <FaRegThumbsUp
+                    className={cls(
+                      "text-lg",
+                      data.favs.length !== 0 ? "text-white" : "text-orange-300"
+                    )}
+                  />
+                  <span>{data.favs.length}</span>
+                </div>
               </button>
             </div>
           </>
