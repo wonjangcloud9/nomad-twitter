@@ -1,6 +1,5 @@
 import React from "react";
 import useUser from "../lib/client/useUser";
-import { NextApiRequest } from "next";
 
 export default () => {
   const { user, isLoading } = useUser();
