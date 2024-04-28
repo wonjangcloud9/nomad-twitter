@@ -4,8 +4,9 @@ import Header from "../_components/header";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Fav, Tweet, User } from "@prisma/client";
-// import useMutation from "../../lib/client/useMutation";
+import useMutation from "../../lib/client/useMutation";
 import { FaRegThumbsUp } from "react-icons/fa";
+import { cls } from "../../lib/client/utils";
 
 interface TweetWithUser extends Tweet {
   user: User;
@@ -24,7 +25,7 @@ export default () => {
   const { data, mutate: boundMutate } = useSWR<TweetResponse>(
     router.query.id ? `/api/tweets/${router.query.id}` : null
   );
-  // const [toggleFav] = useMutation(`/api/tweets/${router.query.id}/fav`);
+  const [toggleFav] = useMutation(`/api/tweets/${router.query.id}/fav`);
 
   return (
     <div className="flex justify-center min-h-screen">
@@ -38,7 +39,8 @@ export default () => {
         </div>
         {data?.ok ? (
           <>
-            <p className="text-lg bg-gray-100 p-3 rounded-lg cursor-pointer ">
+            <div className="text-xl font-bold">{data.tweet.title}</div>
+            <p className="text-lg bg-gray-100 p-3 rounded-lg">
               {data.tweet.description}
             </p>
             <div className="flex gap-3 justify-between px-2 items-center">
@@ -54,16 +56,25 @@ export default () => {
                 </span>
               </div>
               <button
-                className="bg-orange-400 text-white p-2 rounded-lg hover:bg-orange-500 transition text-center w-9"
+                className={cls(
+                  "bg-orange-400 text-white p-2 rounded-lg hover:bg-orange-500 transition text-center w-12",
+                  data.favs.length !== 0 ? "text-white" : "text-orange-300"
+                )}
                 onClick={() => {
-                  // toggleFav();
+                  toggleFav(router.query.id);
                   boundMutate();
                 }}
               >
                 {data.favs.length > 0 ? (
-                  <FaRegThumbsUp className="text-white w-5 h-5" />
+                  <div>
+                    <FaRegThumbsUp className="w-5 h-5 " />
+                    <span>{data.favs.length}</span>
+                  </div>
                 ) : (
-                  <FaRegThumbsUp className="text-white w-5 h-5" />
+                  <div className="flex gap-1 items-center">
+                    <FaRegThumbsUp className="w-5 h-5 " />
+                    <span>{data.favs.length}</span>
+                  </div>
                 )}
               </button>
             </div>
