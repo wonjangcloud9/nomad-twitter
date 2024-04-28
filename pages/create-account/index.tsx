@@ -7,6 +7,7 @@ import useMutation from "../../lib/client/useMutation";
 
 interface MutaionResult {
   ok: boolean;
+  redirectTo: string;
 }
 
 interface createAccountForm {
@@ -17,7 +18,8 @@ interface createAccountForm {
 }
 
 export default () => {
-  const [enter, { loading }] = useMutation<MutaionResult>("/api/users/enter");
+  const [enter, { loading, data }] =
+    useMutation<MutaionResult>("/api/users/enter");
 
   const { register, handleSubmit } = useForm<createAccountForm>();
 
@@ -25,6 +27,10 @@ export default () => {
     if (loading) return;
     enter(validForm);
   };
+
+  if (data?.ok) {
+    window.location.href = data.redirectTo;
+  }
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -37,22 +43,12 @@ export default () => {
         </div>
         <div className="flex gap-1 w-full justify-center items-center bg-gray-200 p-1 rounded-xl">
           <Link href="/create-account">
-            <a
-              className="bg-white px-4 py-2 rounded-lg w-full text-center hover:bg-gray-300 transition "
-              onClick={() => {
-                console.log("Hello");
-              }}
-            >
+            <a className="bg-white px-4 py-2 rounded-lg w-full text-center hover:bg-gray-300 transition ">
               회원가입
             </a>
           </Link>
           <Link href="/log-in">
-            <a
-              className="px-4 py-2 rounded-lg w-full text-gray-400 text-center hover:bg-gray-300 transition"
-              onClick={() => {
-                console.log("Hello");
-              }}
-            >
+            <a className="px-4 py-2 rounded-lg w-full text-gray-400 text-center hover:bg-gray-300 transition">
               로그인
             </a>
           </Link>

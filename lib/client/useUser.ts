@@ -10,11 +10,15 @@ interface ProfileResponse {
 
 export default function useUser() {
   const { data, error } = useSWR<ProfileResponse>("/api/users/me");
+
   const router = useRouter();
   useEffect(() => {
     if (data && !data.ok) {
-      router.replace("/enter");
+      router.replace("/create-account");
     }
   }, [data, router]);
-  return { user: data?.profile, isLoading: !data && !error };
+  return {
+    user: data?.profile,
+    isLoading: !data && !error,
+  };
 }

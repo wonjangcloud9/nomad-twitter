@@ -5,28 +5,20 @@ import bcrypt from "bcrypt";
 import { withApiSession } from "../../../lib/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { email, nickname: name, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!email || !name || !password) {
+  if (!email || !password) {
     return res.status(400).json({ error: "Missing fields" });
   }
 
-  if (await db.user.findUnique({ where: { email } })) {
+  const user = await db.user.findUnique({ where: { email } });
+
+  if (!user) {
     return res.status(400).json({ error: "Email already exists" });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await db.user.create({
-    data: {
-      email,
-      name,
-      password: hashedPassword,
-    },
-  });
-
-  if (!user) {
-    return res.status(500).json({ error: "Failed to create user" });
+  if (!(await bcrypt.compare(password, user.password))) {
+    return res.status(400).json({ error: "Invalid password" });
   }
 
   req.session.user = {
