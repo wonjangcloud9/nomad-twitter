@@ -14,15 +14,7 @@ export default function TextArea({
   ...rest
 }: TextAreaProps) {
   return (
-    <div>
-      {label ? (
-        <label
-          htmlFor={name}
-          className="mb-1 block text-sm font-medium text-gray-700"
-        >
-          {label}
-        </label>
-      ) : null}
+    <div className="flex gap-1 w-full">
       <textarea
         id={name}
         {...register}

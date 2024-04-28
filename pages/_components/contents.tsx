@@ -98,7 +98,7 @@ interface ContentsProps {
 export default ({ username }: ContentsProps) => {
   return (
     <div>
-      <div className="pt-12  bg-white shadow-xl px-3 w-96 ">
+      <div className="pt-12  bg-white shadow-xl px-3 w-96">
         <h1 className="text-2xl font-bold mb-2">안녕하세요, {username}님</h1>
         <p className="text-sm text-gray-500 mb-2">
           {

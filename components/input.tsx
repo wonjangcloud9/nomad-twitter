@@ -2,6 +2,7 @@ import type { UseFormRegisterReturn } from "react-hook-form";
 import { MdOutlineEmail } from "react-icons/md";
 import { CiFaceSmile } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
+import TextArea from "./textarea";
 
 interface InputProps {
   label: string;
@@ -11,6 +12,7 @@ interface InputProps {
   required: boolean;
   placehodler: string;
   error: string | undefined;
+  multiLine?: boolean;
 }
 
 export default function Input({
@@ -21,6 +23,7 @@ export default function Input({
   required,
   error,
   placehodler,
+  multiLine,
 }: InputProps) {
   return (
     <div>
@@ -42,14 +45,23 @@ export default function Input({
           </label>
         </div>
         <div className="rounded-md relative flex items-center shadow-sm w-64">
-          <input
-            id={name}
-            required={required}
-            {...register}
-            type={type}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-            placeholder={placehodler}
-          />
+          {multiLine ? (
+            <TextArea
+              label={label}
+              name={name}
+              register={register}
+              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+            />
+          ) : (
+            <input
+              id={name}
+              required={required}
+              {...register}
+              type={type}
+              className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              placeholder={placehodler}
+            />
+          )}
         </div>
       </div>
       <div>
