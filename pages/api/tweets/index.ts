@@ -9,17 +9,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     session: { user },
   } = req;
 
-  console.log("fdsfsdaafsd");
-
   if (!user) {
     return res.status(401).json({ message: "로그인이 필요합니다." });
   }
   if (req.method === "GET") {
-    console.log("d?");
-    return res.json({ ok: true });
+    const tweets = await db.tweet.findMany({
+      include: {
+        _count: {
+          select: { favs: true },
+        },
+      },
+    });
+    res.json({
+      ok: true,
+      tweets,
+    });
   }
   if (req.method === "POST") {
-    console.log("tt?");
     const tweet = await db.tweet.create({
       data: {
         title,

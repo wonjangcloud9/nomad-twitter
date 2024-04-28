@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { LiaDoorClosedSolid } from "react-icons/lia";
 
 export default () => {
@@ -7,7 +8,9 @@ export default () => {
       style={{ fontFamily: "Noto Sans KR" }}
     >
       <div className="flex items-center justify-between px-4 py-2 ">
-        <h1>🔥</h1>
+        <Link href="/">
+          <a className="text-xl font-bold text-white">🔥</a>
+        </Link>
         <button
           onClick={async () => {
             const res = await fetch("/api/users/logout", {

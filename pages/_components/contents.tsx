@@ -1,86 +1,5 @@
-const listOfItem10 = [
-  {
-    id: 1,
-    name: "item1",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 2,
-    name: "item2",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 3,
-    name: "item3",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 4,
-    name: "item4",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 5,
-    name: "item5",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 6,
-    name: "item6",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 7,
-    name: "item7",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 8,
-    name: "item8",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 9,
-    name: "item9",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 10,
-    name: "item10",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 10,
-    name: "item10",
-    author: "아서왕",
-    description: "설명입니다.",
-  },
-  {
-    id: 10,
-    name: "item10",
-    author: "아서왕",
-  },
-  {
-    id: 10,
-    name: "item10",
-    author: "아서왕",
-  },
-  {
-    id: 10,
-    name: "item10",
-    author: "아서왕",
-  },
-];
+import { Tweet } from "@prisma/client";
+import useSWR from "swr";
 
 const randomWiseSayings = [
   "아무것도 하지 않으면 아무것도 일어나지 않는다.",
@@ -95,7 +14,18 @@ interface ContentsProps {
   username: string | undefined;
 }
 
+interface TweetsResponse {
+  ok: boolean;
+  tweets: Tweet[];
+}
+
 export default ({ username }: ContentsProps) => {
+  const { data } = useSWR<TweetsResponse>("/api/tweets");
+
+  if (!data) return <div>로딩중입니다. 잠시만 기다려주세요.</div>;
+
+  console.log(data.tweets);
+
   return (
     <div>
       <div className="pt-12  bg-white shadow-xl px-3 w-96">
@@ -107,13 +37,21 @@ export default ({ username }: ContentsProps) => {
             ]
           }
         </p>
-        {listOfItem10.map((item) => (
-          <div key={item.id} className="m-3 bg-white text-black">
-            <h2 className="text-lg font-bold">{item.name}</h2>
-            <p className="text-sm">{item.description}</p>
-            <p className="text-xs text-gray-500">{item.author}</p>
+        {data &&
+          data?.tweets.map((tweet) => (
+            <div key={tweet.id} className="border-b border-gray-200 py-2">
+              <div className="text-lg font-bold">{tweet.title}</div>
+              <div className="text-sm text-gray-500">{tweet.description}</div>
+              <div className="text-sm text-gray-500">
+                {tweet.createdAt.toString()}
+              </div>
+            </div>
+          ))}
+        {!data && (
+          <div className="text-sm text-gray-500">
+            로딩중입니다. 잠시만 기다려주세요.
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
