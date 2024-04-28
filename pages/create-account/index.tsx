@@ -25,7 +25,6 @@ export default () => {
     useForm<createAccountForm>();
 
   const onValid = (validForm: createAccountForm) => {
-    console.log(formState.errors);
     if (loading) return;
     enter(validForm);
   };

@@ -18,9 +18,6 @@ export default function withHandler({ methods, handler }: ConfigType) {
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    // if (req.method && !methods.includes(req.method as any)) {
-    //   return res.status(405).end();
-    // }
     console.log(methods);
 
     try {

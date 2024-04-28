@@ -25,9 +25,7 @@ export default () => {
     title: string;
     description: string;
   }) => {
-    console.log("here");
     if (tweetLoading) return;
-    console.log("????");
 
     uploadTweet({ title, description, id: user?.id });
   };

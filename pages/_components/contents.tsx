@@ -48,7 +48,6 @@ export default ({ username }: ContentsProps) => {
         {data &&
           data?.tweets.map((tweet) => {
             const tweetId = tweet.id;
-            console.log(tweet);
             return (
               <Link href={`/tweets/${tweetId}`} key={tweet.id}>
                 <div className="border-b border-gray-200 py-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200 px-2 rounded-md">
