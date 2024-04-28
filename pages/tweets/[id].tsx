@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../_components/header";
-// import useUser from "../../lib/client/useUser";
+import useUser from "../../lib/client/useUser";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Fav, Tweet, User } from "@prisma/client";
@@ -19,13 +19,22 @@ interface TweetResponse {
 }
 
 export default () => {
-  // const { user, isLoading } = useUser();
+  const { user } = useUser();
   const router = useRouter();
-  // const { mutate } = useSWRConfig();
   const { data, mutate: boundMutate } = useSWR<TweetResponse>(
     router.query.id ? `/api/tweets/${router.query.id}` : null
   );
   const [toggleFav] = useMutation(`/api/tweets/${router.query.id}/fav`);
+
+  const onFavClick = async () => {
+    if (!data) return;
+    await boundMutate((prev) => prev && { ...prev, favs: [] }, false);
+    toggleFav({});
+  };
+
+  if (!user) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div className="flex justify-center min-h-screen">
@@ -57,21 +66,18 @@ export default () => {
               </div>
               <button
                 className={cls(
-                  "bg-orange-400 text-white p-2 rounded-lg hover:bg-orange-500 transition text-center w-12",
+                  "bg-orange-400 text-white p-2 rounded-lg hover:bg-orange-500 transition text-center w-14",
                   data.favs.length !== 0 ? "text-white" : "text-orange-300"
                 )}
-                onClick={() => {
-                  toggleFav(router.query.id);
-                  boundMutate();
-                }}
+                onClick={onFavClick}
               >
                 {data.favs.length > 0 ? (
-                  <div>
+                  <div className="flex items-center gap-2">
                     <FaRegThumbsUp className="w-5 h-5 " />
                     <span>{data.favs.length}</span>
                   </div>
                 ) : (
-                  <div className="flex gap-1 items-center">
+                  <div className="flex items-center gap-2">
                     <FaRegThumbsUp className="w-5 h-5 " />
                     <span>{data.favs.length}</span>
                   </div>
@@ -80,7 +86,7 @@ export default () => {
             </div>
           </>
         ) : (
-          <div>Loading...</div>
+          <div>loading...</div>
         )}
       </div>
     </div>
