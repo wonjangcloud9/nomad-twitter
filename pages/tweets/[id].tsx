@@ -7,6 +7,8 @@ import { Fav, Tweet, User } from "@prisma/client";
 import useMutation from "../../lib/client/useMutation";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { cls, timeAgo } from "../../lib/client/utils";
+import HeaderSkeleton from "../_components/header-skeleton";
+import DetailSkeleton from "./_components/detail-skeleton";
 
 interface TweetWithUser extends Tweet {
   user: User;
@@ -38,7 +40,12 @@ export default () => {
   };
 
   if (!user) {
-    return <div>loading...</div>;
+    return (
+      <div className="flex justify-center min-h-screen">
+        <HeaderSkeleton />
+        <DetailSkeleton />
+      </div>
+    );
   }
 
   return (
@@ -86,7 +93,10 @@ export default () => {
             </div>
           </>
         ) : (
-          <div>loading...</div>
+          <div className="flex justify-center min-h-screen">
+            <HeaderSkeleton />
+            <DetailSkeleton />
+          </div>
         )}
       </div>
     </div>
