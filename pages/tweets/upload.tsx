@@ -91,8 +91,11 @@ export default () => {
             error={formState.errors?.description?.message}
             multiLine
           />
-          <button className="bg-orange-500 text-white py-2 rounded-md mt-5">
-            게시
+          <button
+            className="bg-orange-500 text-white py-2 rounded-md mt-5"
+            disabled={tweetLoading}
+          >
+            {tweetLoading ? "로딩중..." : "Tweet 만들기"}
           </button>
         </form>
       </div>
