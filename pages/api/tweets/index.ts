@@ -18,6 +18,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         _count: {
           select: { favs: true },
         },
+        user: {
+          select: { name: true },
+        },
       },
       orderBy: {
         createdAt: "desc",

@@ -4,6 +4,7 @@ import Input from "../../components/input";
 import { useForm } from "react-hook-form";
 import useMutation from "../../lib/client/useMutation";
 import { useRouter } from "next/router";
+import Header from "../_components/header";
 
 interface uploadForm {
   title: string;
@@ -38,6 +39,7 @@ export default () => {
 
   return (
     <div className="flex justify-center min-h-screen">
+      <Header />
       <div className="pt-12  bg-white shadow-xl px-3 w-96 flex flex-col gap-12 justify-center">
         <div className="text-2xl font-bold text-center">Tweet 만들기</div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onValid)}>
