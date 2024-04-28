@@ -78,7 +78,7 @@ export default () => {
             error={formState.errors.password?.message}
           />
           <div className="mt-3 text-center">
-            <Button large text={"로그인"} />
+            <Button large text={"로그인"} loading={loading} />
           </div>
         </form>
       </div>

@@ -115,7 +115,7 @@ export default () => {
             error={formState.errors?.passwordConfirm?.message}
           />
           <div className="mt-3 text-center">
-            <Button large text={"회원가입"} />
+            <Button large text={"회원가입"} loading={loading} />
           </div>
         </form>
       </div>
