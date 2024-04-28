@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Fav, Tweet, User } from "@prisma/client";
 import useMutation from "../../lib/client/useMutation";
 import { FaRegThumbsUp } from "react-icons/fa";
-import { cls } from "../../lib/client/utils";
+import { cls, timeAgo } from "../../lib/client/utils";
 
 interface TweetWithUser extends Tweet {
   user: User;
@@ -58,16 +58,11 @@ export default () => {
               {data.tweet.description}
             </p>
             <div className="flex gap-3 justify-between px-2 items-center">
-              <div
-                className="flex flex-col
-              justify-center items-center"
-              >
-                <span className="text-gray-500">@{data.tweet.user.name}</span>
-              </div>
-              <div>
-                <span className="text-gray-500">
-                  {new Date(data.tweet.createdAt).toLocaleString()}
-                </span>
+              <div className="flex gap-3 justify-center items-center">
+                <div className="text-gray-500">@{data.tweet.user.name}</div>
+                <div className="text-gray-500">
+                  {timeAgo(data.tweet.createdAt.toString())}
+                </div>
               </div>
               <button
                 className={cls(
