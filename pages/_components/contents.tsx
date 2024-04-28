@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { timeAgo, wiseSayings } from "../../lib/client/utils";
 import Link from "next/link";
+import ContentsSkeletion from "./contents-skeletion";
 
 interface ContentsProps {
   username: string | undefined;
@@ -26,7 +27,7 @@ interface TweetsResponse {
 export default ({ username }: ContentsProps) => {
   const { data } = useSWR<TweetsResponse>("/api/tweets");
 
-  if (!data) return <div>로딩중입니다. 잠시만 기다려주세요.</div>;
+  if (!data) return <ContentsSkeletion />;
 
   return (
     <div>
