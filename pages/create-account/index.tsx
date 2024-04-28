@@ -35,7 +35,7 @@ export default () => {
   }
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div className="bg-gray-100 flex items-center justify-center min-h-screen ">
       <div className="flex flex-col items-center justify-center  h-screen max-w-screen-sm gap-3">
         <div className="flex  flex-col first-letter:font-bold capitalize text-4xl text-center mb-4 gap-2">
           <div className="text-2xl font-bold">돌아온 것을 환영합니다</div>
