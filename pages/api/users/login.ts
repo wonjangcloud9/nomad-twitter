@@ -8,17 +8,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Missing fields" });
+    return res.json({
+      error: "유효하지 않은 이메일 또는 비밀번호",
+      ok: false,
+    });
   }
 
   const user = await db.user.findUnique({ where: { email } });
 
   if (!user) {
-    return res.status(400).json({ error: "Email already exists" });
+    return res.json({
+      error: "유효 하지 않은 이메일 또는 비밀번호",
+      ok: false,
+    });
   }
 
   if (!(await bcrypt.compare(password, user.password))) {
-    return res.status(400).json({ error: "Invalid password" });
+    return res.json({
+      error: "유효 하지 않은 이메일 또는 비밀번호",
+      ok: false,
+    });
   }
 
   req.session.user = {

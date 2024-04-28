@@ -19,9 +19,9 @@ export default () => {
   const [enter, { loading, data }] =
     useMutation<MutaionResult>("/api/users/login");
 
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const { register, handleSubmit, formState } = useForm<LoginForm>();
 
-  const onValid = (validForm: LoginForm) => {
+  const onValid = async (validForm: LoginForm) => {
     if (loading) return;
     enter(validForm);
   };
@@ -55,18 +55,27 @@ export default () => {
           <Input
             label="이메일"
             name="email"
-            register={register("email")}
+            register={register("email", {
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: "이메일 형식이 아닙니다.",
+              },
+            })}
             type="email"
             required={true}
             placehodler="이메일을 입력해주세요."
+            error={formState.errors.email?.message}
           />
           <Input
             label="패스워드"
             name="password"
-            register={register("password")}
+            register={register("password", {
+              required: "패스워드를 입력해주세요.",
+            })}
             type="text"
             required={true}
             placehodler="패스워드를 입력해주세요."
+            error={formState.errors.password?.message}
           />
           <div className="mt-3 text-center">
             <Button large text={"로그인"} />

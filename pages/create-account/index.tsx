@@ -21,9 +21,11 @@ export default () => {
   const [enter, { loading, data }] =
     useMutation<MutaionResult>("/api/users/enter");
 
-  const { register, handleSubmit } = useForm<createAccountForm>();
+  const { register, handleSubmit, formState, getValues } =
+    useForm<createAccountForm>();
 
   const onValid = (validForm: createAccountForm) => {
+    console.log(formState.errors);
     if (loading) return;
     enter(validForm);
   };
@@ -57,34 +59,61 @@ export default () => {
           <Input
             label="이메일"
             name="email"
-            register={register("email")}
+            register={register("email", {
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "이메일 형식이 아닙니다.",
+              },
+            })}
             type="email"
             required={true}
             placehodler="이메일을 입력해주세요."
+            error={formState.errors?.email?.message}
           />
           <Input
             label="닉네임"
             name="nickname"
-            register={register("nickname")}
+            register={register("nickname", {
+              minLength: {
+                value: 2,
+                message: "닉네임은 2자 이상이어야 합니다.",
+              },
+              maxLength: {
+                value: 10,
+                message: "닉네임은 10자 이하여야 합니다.",
+              },
+            })}
             type="text"
             required={true}
             placehodler="닉네임을 입력해주세요."
+            error={formState.errors?.nickname?.message}
           />
           <Input
             label="패스워드"
             name="password"
-            register={register("password")}
+            register={register("password", {
+              minLength: {
+                value: 2,
+                message: "패스워드는 2자 이상이어야 합니다.",
+              },
+            })}
             type="text"
             required={true}
             placehodler="패스워드를 입력해주세요."
+            error={formState.errors?.password?.message}
           />
           <Input
             label="패스워드"
             name="passwordConfirm"
-            register={register("passwordConfirm")}
+            register={register("passwordConfirm", {
+              validate: (value) =>
+                value === getValues("password") ||
+                "패스워드가 일치하지 않습니다.",
+            })}
             type="text"
             required={true}
             placehodler="패스워드를 다시 입력해주세요."
+            error={formState.errors?.passwordConfirm?.message}
           />
           <div className="mt-3 text-center">
             <Button large text={"회원가입"} />
