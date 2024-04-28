@@ -6,7 +6,6 @@ import db from "../../../../lib/server/db";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
-    session: { user },
   } = req;
   const tweet = await db.tweet.findUnique({
     where: { id: +id.toString() },
@@ -19,10 +18,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!tweet) {
     return res.status(404).json({ ok: false });
   }
-  const favs = await db.fav.findFirst({
+  const favs = await db.fav.findMany({
     where: {
       tweetId: tweet.id,
-      userId: user?.id,
     },
     select: { id: true },
   });
@@ -30,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.json({
     ok: true,
     tweet,
-    favs: favs ? [favs] : [],
+    favs,
   });
 }
 

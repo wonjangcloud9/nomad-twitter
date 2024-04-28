@@ -28,7 +28,12 @@ export default () => {
 
   const onFavClick = async () => {
     if (!data) return;
-    await boundMutate((prev) => prev && { ...prev, favs: [] }, false);
+    await boundMutate({
+      ...data,
+      favs: data.favs.filter((fav) => fav.userId !== user?.id),
+    }).then(() => {
+      boundMutate();
+    });
     toggleFav({});
   };
 
@@ -39,7 +44,7 @@ export default () => {
   return (
     <div className="flex justify-center min-h-screen">
       <Header />
-      <div className="pt-12  bg-white shadow-xl px-3 w-96 flex flex-col gap-5 justify-center">
+      <div className="bg-white shadow-xl px-3 w-96 flex flex-col gap-5 justify-start pt-20">
         <div
           onClick={() => router.back()}
           className="cursor-pointer text-orange-500 "
