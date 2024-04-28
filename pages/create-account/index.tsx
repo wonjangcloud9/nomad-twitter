@@ -90,7 +90,9 @@ export default () => {
             required={true}
             placehodler="패스워드를 다시 입력해주세요."
           />
-          <Button large text={"회원가입"} />
+          <div className="mt-3 text-center">
+            <Button large text={"회원가입"} />
+          </div>
         </form>
       </div>
     </div>
