@@ -1,5 +1,6 @@
 import { Tweet } from "@prisma/client";
 import useSWR from "swr";
+import { timeAgo } from "../../lib/client/utils";
 
 const randomWiseSayings = [
   "아무것도 하지 않으면 아무것도 일어나지 않는다.",
@@ -43,7 +44,7 @@ export default ({ username }: ContentsProps) => {
               <div className="text-lg font-bold">{tweet.title}</div>
               <div className="text-sm text-gray-500">{tweet.description}</div>
               <div className="text-sm text-gray-500">
-                {tweet.createdAt.toString()}
+                {timeAgo(tweet.createdAt.toString())}
               </div>
             </div>
           ))}

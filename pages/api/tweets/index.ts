@@ -19,6 +19,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           select: { favs: true },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     res.json({
       ok: true,
