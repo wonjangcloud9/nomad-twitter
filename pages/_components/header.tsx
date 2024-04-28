@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { LiaDoorClosedSolid } from "react-icons/lia";
 
 export default () => {
+  const router = useRouter();
   return (
     <div
       className="fixed top-0 items-start justify-center max-w-screen-sm w-96 bg-orange-400 "
@@ -20,7 +22,7 @@ export default () => {
               },
             });
             if (res.ok) {
-              window.location.href = "/";
+              router.push("/create-account");
             }
           }}
         >

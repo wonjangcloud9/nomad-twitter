@@ -1,6 +1,6 @@
-import { Tweet } from "@prisma/client";
 import useSWR from "swr";
 import { timeAgo } from "../../lib/client/utils";
+import Link from "next/link";
 
 const randomWiseSayings = [
   "아무것도 하지 않으면 아무것도 일어나지 않는다.",
@@ -15,17 +15,24 @@ interface ContentsProps {
   username: string | undefined;
 }
 
+interface CustomTweet {
+  id: number;
+  title: string;
+  description: string;
+  createdAt: string;
+  _count: {
+    favs: number;
+  };
+}
 interface TweetsResponse {
   ok: boolean;
-  tweets: Tweet[];
+  tweets: CustomTweet[];
 }
 
 export default ({ username }: ContentsProps) => {
   const { data } = useSWR<TweetsResponse>("/api/tweets");
 
   if (!data) return <div>로딩중입니다. 잠시만 기다려주세요.</div>;
-
-  console.log(data.tweets);
 
   return (
     <div>
@@ -39,15 +46,33 @@ export default ({ username }: ContentsProps) => {
           }
         </p>
         {data &&
-          data?.tweets.map((tweet) => (
-            <div key={tweet.id} className="border-b border-gray-200 py-2">
-              <div className="text-lg font-bold">{tweet.title}</div>
-              <div className="text-sm text-gray-500">{tweet.description}</div>
-              <div className="text-sm text-gray-500">
-                {timeAgo(tweet.createdAt.toString())}
-              </div>
-            </div>
-          ))}
+          data?.tweets.map((tweet) => {
+            const tweetId = tweet.id;
+            console.log(tweet);
+            return (
+              <Link href={`/tweets/${tweetId}`} key={tweet.id}>
+                <div className="border-b border-gray-200 py-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200 px-2 rounded-md">
+                  <div className="text-lg font-bold">{tweet.title}</div>
+                  <div className="text-sm text-gray-500">
+                    {tweet.description}
+                  </div>
+                  <div
+                    className="flex justify-between items-center mt-2"
+                    key={tweet.id}
+                  >
+                    <div className="text-sm text-gray-500">
+                      {timeAgo(tweet.createdAt.toString())}
+                    </div>
+                    <div>
+                      <span className="text-sm text-gray-500">
+                        {tweet._count?.favs} 따봉
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         {!data && (
           <div className="text-sm text-gray-500">
             로딩중입니다. 잠시만 기다려주세요.
