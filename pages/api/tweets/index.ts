@@ -42,8 +42,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       tweet,
     });
   }
-
-  res.json({ ok: true });
 }
 
 export default withApiSession(
