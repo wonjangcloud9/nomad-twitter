@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } = req;
   const alreadyExists = await db.fav.findFirst({
     where: {
-      productId: +id.toString(),
+      tweetId: +id.toString(),
       userId: user?.id,
     },
   });
@@ -28,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             id: user?.id,
           },
         },
-        product: {
+        tweet: {
           connect: {
             id: +id.toString(),
           },
